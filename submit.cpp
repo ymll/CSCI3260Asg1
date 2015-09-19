@@ -78,6 +78,16 @@ void drawGround()
 	glPopMatrix();
 }
 
+void drawPool()
+{
+	glPushMatrix();
+	glTranslatef(100.0f, 0.0f, 300.0f);
+	glScalef(1.0f, 0.1f, 1.0f);
+	glColor3f(0.0f, 0.0f, 1.0f);
+	glutSolidSphere(50, 50, 50);
+	glPopMatrix();
+}
+
 void display(void) // Here's Where We Do All The Drawing
 {
 	glClearColor(0.0, 0.0, 0.0, 1);
@@ -90,6 +100,7 @@ void display(void) // Here's Where We Do All The Drawing
 	// TODO:
 	// Draw grounds and objects here
 	drawGround();
+	drawPool();
 
 	glPopMatrix();
 	glutSwapBuffers();
