@@ -22,6 +22,8 @@ float cameraMoveSpeed(10.0);
 float cam_X(0), cam_Y(200), cam_Z(0);
 float cam_ViewX(0), cam_ViewY(0), cam_ViewZ(-500);
 
+float groundWidth(400.0), groundLong(800.0);
+
 
 void init(void) // All Setup For OpenGL Goes Here
 {
@@ -66,6 +68,16 @@ void moveCameraBy(float deltaX, float deltaY, float deltaZ)
 {
 	moveCameraTo(cam_X + deltaX, cam_Y + deltaY, cam_Z + deltaZ);
 }
+
+void drawGround()
+{
+	glPushMatrix();
+	glScalef(groundWidth, 0.1f, groundLong);
+	glColor3f(0.0f, 1.0f, 0.0f);
+	glutSolidCube(1.0f);
+	glPopMatrix();
+}
+
 void display(void) // Here's Where We Do All The Drawing
 {
 	glClearColor(0.0, 0.0, 0.0, 1);
@@ -77,6 +89,7 @@ void display(void) // Here's Where We Do All The Drawing
 
 	// TODO:
 	// Draw grounds and objects here
+	drawGround();
 
 	glPopMatrix();
 	glutSwapBuffers();
