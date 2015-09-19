@@ -18,7 +18,8 @@
 int winWidth = 600;
 int winHeight = 600;
 
-float cam_X(0), cam_Y(0), cam_Z(-250);
+float cameraMoveSpeed(10.0);
+float cam_X(0), cam_Y(200), cam_Z(0);
 float cam_ViewX(0), cam_ViewY(0), cam_ViewZ(-500);
 
 
@@ -48,6 +49,23 @@ void updateCamera()
 	gluLookAt(cam_X,cam_Y,cam_Z, cam_ViewX, cam_ViewY, cam_ViewZ, 0, 1, 0);
 }
 
+// Move camera to specified position without changing view angle
+void moveCameraTo(float newCamX, float newCamY, float newCamZ)
+{
+	cam_ViewX = (cam_ViewX - cam_X) + newCamX;
+	cam_ViewY = (cam_ViewY - cam_Y) + newCamY;
+	cam_ViewZ = (cam_ViewZ - cam_Z) + newCamZ;
+	cam_X = newCamX;
+	cam_Y = newCamY;
+	cam_Z = newCamZ;
+	printf("moveCameraTo: %f, %f, %f; %f, %f, %f\n", cam_X,cam_Y,cam_Z, cam_ViewX, cam_ViewY, cam_ViewZ);
+}
+
+// Move camera by magnitude of movement
+void moveCameraBy(float deltaX, float deltaY, float deltaZ)
+{
+	moveCameraTo(cam_X + deltaX, cam_Y + deltaY, cam_Z + deltaZ);
+}
 void display(void) // Here's Where We Do All The Drawing
 {
 	glClearColor(0.0, 0.0, 0.0, 1);
@@ -90,8 +108,16 @@ void special(int key, int x, int y) // Handle special keys
 	switch (key) 
 	{
 	case GLUT_KEY_LEFT:
+		moveCameraBy(-cameraMoveSpeed, 0, 0);
 		break;
 	case GLUT_KEY_UP:
+		moveCameraBy(0, 0, -cameraMoveSpeed);
+		break;
+	case GLUT_KEY_RIGHT:
+		moveCameraBy(cameraMoveSpeed, 0, 0);
+		break;
+	case GLUT_KEY_DOWN:
+		moveCameraBy(0, 0, cameraMoveSpeed);
 		break;
 	}
 }
