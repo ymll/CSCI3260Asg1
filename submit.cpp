@@ -4,8 +4,8 @@
 *****************************************************************************/
 /*****************************************************************************
 		Student Information
-		Student ID:
-		Student Name:
+		Student ID: 1155032377
+		Student Name: Yung Man Lee
 *****************************************************************************/
 
 #include <stdlib.h>
@@ -44,42 +44,17 @@ void init(void) // All Setup For OpenGL Goes Here
 }
 
 
-
 void display(void) // Here's Where We Do All The Drawing
 {
 	glClearColor(0.0, 0.0, 0.0, 1);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-	
+
 	glPushMatrix();
 	gluLookAt(cam_X,cam_Y,cam_Z, cam_ViewX, cam_ViewY, cam_ViewZ, 0, 1, 0);
 	glTranslatef(0, 0, -550);
 
-	
-	
-		// A ball  
-		// Remove this part and start to add your own drawing
-			GLfloat no_mat[] = {0.0,0.0,0.0,1.0};
-			GLfloat mat_diffuse[] = {0.1,0.2,0.9,1.0};
-			GLfloat mat_specular[] = {0.8,0.8,0.8,1.0};
-			GLfloat high_shininess[] = {20.0};
-			glMaterialfv(GL_FRONT,GL_DIFFUSE,mat_diffuse);
-			glMaterialfv(GL_FRONT,GL_SPECULAR,mat_specular);
-			glMaterialfv(GL_FRONT,GL_SHININESS,high_shininess);
-			glMaterialfv(GL_FRONT,GL_EMISSION,no_mat);
-			glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
-
-			glColor4f(0.1, 0.4, 0.1, 1.0);
-			glutSolidSphere(40, 15, 15);
-		//End of A ball  
-
-
 	// TODO:
 	// Draw grounds and objects here
-	
-
-
-
-
 
 	glPopMatrix();
 	glutSwapBuffers();
@@ -97,7 +72,7 @@ void reshape(int w, int h) // Resize the GL Window. w=width, h=height
 	glViewport(0, 0, (GLsizei) w, (GLsizei) h);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	
+
 	gluPerspective(45, (float)w/(float)h, 250, 900); 
 
 	glMatrixMode(GL_MODELVIEW);
@@ -110,10 +85,10 @@ void special(int key, int x, int y) // Handle special keys
 {	
 	switch (key) 
 	{
-		case GLUT_KEY_LEFT:
-			break;
-		case GLUT_KEY_UP:
-			break;
+	case GLUT_KEY_LEFT:
+		break;
+	case GLUT_KEY_UP:
+		break;
 	}
 }
 
@@ -121,11 +96,11 @@ void keyboard(unsigned char key, int x, int y) // Handle the keyboard events her
 {
 	switch (key) 
 	{
-		case '\033'://press 'esc' to quit
-		   exit(0);
-		   break;
-		   // TODO:
-		   // Add keyboard control here
+	case '\033'://press 'esc' to quit
+		exit(0);
+		break;
+		// TODO:
+		// Add keyboard control here
 
 	}
 }
@@ -170,11 +145,9 @@ void main(int argc, char** argv)
 	glutPassiveMotionFunc(mousemove);
 	glutMouseFunc(mouseclick);
 	glutIdleFunc(idle);
-	
-	
+
 	/*Enter the GLUT event processing loop which never returns.
 	it will call different registered CALLBACK according
 	to different events. */
 	glutMainLoop();
-	
 }
