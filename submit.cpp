@@ -43,6 +43,10 @@ void init(void) // All Setup For OpenGL Goes Here
 	glEnable(GL_COLOR_MATERIAL); 
 }
 
+void updateCamera() 
+{
+	gluLookAt(cam_X,cam_Y,cam_Z, cam_ViewX, cam_ViewY, cam_ViewZ, 0, 1, 0);
+}
 
 void display(void) // Here's Where We Do All The Drawing
 {
@@ -50,7 +54,7 @@ void display(void) // Here's Where We Do All The Drawing
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
 	glPushMatrix();
-	gluLookAt(cam_X,cam_Y,cam_Z, cam_ViewX, cam_ViewY, cam_ViewZ, 0, 1, 0);
+	updateCamera();
 	glTranslatef(0, 0, -550);
 
 	// TODO:
