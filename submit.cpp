@@ -1,11 +1,11 @@
 /*****************************************************************************
-        FILE : submit.cpp (csci3260 2015-2016 Assignment 1)
-        NOTE : you have to implement functions in this file
+FILE : submit.cpp (csci3260 2015-2016 Assignment 1)
+NOTE : you have to implement functions in this file
 *****************************************************************************/
 /*****************************************************************************
-		Student Information
-		Student ID: 1155032377
-		Student Name: Yung Man Lee
+Student Information
+Student ID: 1155032377
+Student Name: Yung Man Lee
 *****************************************************************************/
 
 #include <stdlib.h>
