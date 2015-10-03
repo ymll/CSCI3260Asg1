@@ -19,8 +19,8 @@ int winWidth = 600;
 int winHeight = 600;
 
 float cameraMoveSpeed(10.0);
-float cam_X(0), cam_Y(200), cam_Z(0);
-float cam_ViewX(0), cam_ViewY(0), cam_ViewZ(-500);
+float cam_X(0), cam_Y(200), cam_Z(500);
+float cam_ViewX(0), cam_ViewY(0), cam_ViewZ(0);
 
 float groundWidth(400.0), groundLong(800.0);
 
@@ -118,9 +118,8 @@ void display(void) // Here's Where We Do All The Drawing
 	glClearColor(0.0, 0.0, 0.0, 1);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
-	glPushMatrix();
+	glLoadIdentity();
 	updateCamera();
-	glTranslatef(0, 0, -550);
 
 	// TODO:
 	// Draw grounds and objects here
@@ -128,7 +127,6 @@ void display(void) // Here's Where We Do All The Drawing
 	drawGround();
 	drawPool();
 
-	glPopMatrix();
 	glutSwapBuffers();
 	glFlush();	
 
