@@ -69,6 +69,31 @@ void moveCameraBy(float deltaX, float deltaY, float deltaZ)
 	moveCameraTo(cam_X + deltaX, cam_Y + deltaY, cam_Z + deltaZ);
 }
 
+void drawOrigin()
+{
+	glPushMatrix();
+	glColor3f(1.0f, 1.0f, 0.0f);
+	glBegin(GL_LINES);
+	{
+		glVertex4f(0.0f, 0.0f, 0.0f, 1.0f);
+		glVertex4f(0.0f, 1.0f, 0.0f, 0.0f);
+	}
+	glEnd();
+	glBegin(GL_LINES);
+	{
+		glVertex4f(0.0f, 0.0f, 0.0f, 1.0f);
+		glVertex4f(1.0f, 0.0f, 0.0f, 0.0f);
+	}
+	glEnd();
+	glBegin(GL_LINES);
+	{
+		glVertex4f(0.0f, 0.0f, 0.0f, 1.0f);
+		glVertex4f(0.0f, 0.0f, 1.0f, 0.0f);
+	}
+	glEnd();
+	glPopMatrix();
+}
+
 void drawGround()
 {
 	glPushMatrix();
@@ -99,6 +124,7 @@ void display(void) // Here's Where We Do All The Drawing
 
 	// TODO:
 	// Draw grounds and objects here
+	drawOrigin();
 	drawGround();
 	drawPool();
 
@@ -119,7 +145,7 @@ void reshape(int w, int h) // Resize the GL Window. w=width, h=height
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 
-	gluPerspective(45, (float)w/(float)h, 250, 900); 
+	gluPerspective(45, (float)w/(float)h, 100, 2000); 
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
