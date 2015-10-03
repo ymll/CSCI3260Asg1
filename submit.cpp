@@ -23,6 +23,7 @@ float cam_X(0), cam_Y(200), cam_Z(500);
 float cam_ViewX(0), cam_ViewY(0), cam_ViewZ(0);
 
 float groundWidth(400.0), groundLong(800.0);
+GLUquadric *quad;
 
 
 void init(void) // All Setup For OpenGL Goes Here
@@ -44,6 +45,8 @@ void init(void) // All Setup For OpenGL Goes Here
 	glFrontFace(GL_CCW);		// Define Counter-Clockwise as front face
 
 	glEnable(GL_COLOR_MATERIAL); 
+
+	quad = gluNewQuadric();
 }
 
 void updateCamera() 
@@ -106,10 +109,10 @@ void drawGround()
 void drawPool()
 {
 	glPushMatrix();
-	glTranslatef(100.0f, 0.0f, 300.0f);
-	glScalef(1.0f, 0.1f, 1.0f);
+	glTranslatef(100.0f, 1.0f, 300.0f);
+	glRotatef(-90, 1, 0, 0);
 	glColor3f(0.0f, 0.0f, 1.0f);
-	glutSolidSphere(50, 50, 50);
+	gluDisk(quad, 0.0, 50, 60, 1);
 	glPopMatrix();
 }
 
