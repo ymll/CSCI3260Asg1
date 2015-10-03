@@ -21,10 +21,10 @@ int winWidth = 600;
 int winHeight = 600;
 
 float cameraMoveSpeed(10.0);
-float cam_X(0), cam_Y(200), cam_Z(500);
+float cam_X(0), cam_Y(300), cam_Z(500);
 float cam_ViewX(0), cam_ViewY(0), cam_ViewZ(0);
 
-float groundWidth(400.0), groundLong(800.0);
+float groundWidth(600.0), groundLong(800.0);
 GLUquadric *quad;
 
 
@@ -103,7 +103,7 @@ void drawGround()
 {
 	glPushMatrix();
 	glScalef(groundWidth, 0.1f, groundLong);
-	glColor3f(0.7f, 0.7f, 0.7f);
+	glColor3f(0.55f, 0.65f, 0.8f);
 	glutSolidCube(1.0f);
 	glPopMatrix();
 }
@@ -111,10 +111,10 @@ void drawGround()
 void drawPool()
 {
 	glPushMatrix();
-	glTranslatef(100.0f, 1.0f, 300.0f);
+	glTranslatef(100.0f, 1.0f, 200.0f);
 	glRotatef(-90, 1, 0, 0);
-	glColor3f(0.0f, 0.0f, 1.0f);
-	gluDisk(quad, 0.0, 50, 60, 1);
+	glColor3f(0.5f, 0.6f, 0.85f);
+	gluDisk(quad, 0.0, 85, 20, 1);
 	glPopMatrix();
 }
 
@@ -135,10 +135,17 @@ void drawSnowman()
 	}
 
 	// Draw hat
-	glColor3f(1.0f, 0.0f, 0.0f);
+	glColor3f(1.0f, 0.0f, 0.2f);
 	glTranslatef(0.0, snowballsRadius[snowballCount] - 10.0, 0.0);
 	glRotatef(-90, 1, 0, 0);
 	glutSolidCone(20.0, 30.0, 60, 60);
+
+	// Draw eyes
+	glColor3f(0.1f, 0.1f, 0.1f);
+	glTranslatef(snowballsRadius[snowballCount] / 5, snowballsRadius[snowballCount] * -0.85, snowballsRadius[snowballCount] * -0.5);
+	gluSphere(quad, 5, 10, 10);
+	glTranslatef(snowballsRadius[snowballCount] / -2.5, 0.0, 0.0);
+	gluSphere(quad, 5, 10, 10);
 
 	glPopMatrix();
 }
