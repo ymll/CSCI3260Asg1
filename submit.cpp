@@ -14,6 +14,8 @@ Student Name: Yung Man Lee
 #include <windows.h>
 #include <math.h>
 #include <time.h>
+#include <vector>
+using namespace std;
 
 int winWidth = 600;
 int winHeight = 600;
@@ -101,7 +103,7 @@ void drawGround()
 {
 	glPushMatrix();
 	glScalef(groundWidth, 0.1f, groundLong);
-	glColor3f(0.0f, 1.0f, 0.0f);
+	glColor3f(0.7f, 0.7f, 0.7f);
 	glutSolidCube(1.0f);
 	glPopMatrix();
 }
@@ -113,6 +115,31 @@ void drawPool()
 	glRotatef(-90, 1, 0, 0);
 	glColor3f(0.0f, 0.0f, 1.0f);
 	gluDisk(quad, 0.0, 50, 60, 1);
+	glPopMatrix();
+}
+
+void drawSnowman()
+{
+	double stickiness = 20.0;
+	const double snowballsRadius[4] = {0.0, 50.0, 40.0, 30.0};
+	int snowballCount = sizeof(snowballsRadius) / sizeof(snowballsRadius[0]) - 1;
+
+	glPushMatrix();
+
+	// Draw snowballs
+	glColor3f(0.7f, 0.7f, 0.7f);
+	for(unsigned int i=1; i<=snowballCount; i++)
+	{
+		glTranslatef(0.0, snowballsRadius[i] + snowballsRadius[i-1] - stickiness, 0.0);
+		gluSphere(quad, snowballsRadius[i], 60, 60);
+	}
+
+	// Draw hat
+	glColor3f(1.0f, 0.0f, 0.0f);
+	glTranslatef(0.0, snowballsRadius[snowballCount] - 10.0, 0.0);
+	glRotatef(-90, 1, 0, 0);
+	glutSolidCone(20.0, 30.0, 60, 60);
+
 	glPopMatrix();
 }
 
@@ -129,6 +156,7 @@ void display(void) // Here's Where We Do All The Drawing
 	drawOrigin();
 	drawGround();
 	drawPool();
+	drawSnowman();
 
 	glutSwapBuffers();
 	glFlush();	
