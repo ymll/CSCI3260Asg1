@@ -41,6 +41,7 @@ struct snowflake
 float snowflakeFallingSpeed = 1.0f;
 vector<snowflake> snowflakes;
 bool isSnowFalling = true;
+int maxTimeSnowOnFloor = 200;
 
 void addRandomSnowflake();
 
@@ -305,7 +306,13 @@ void mousemove(int x, int y) // Handle the mouse movement events here
 
 void idle()
 {
-	Sleep(10);
+	for (vector<snowflake>::iterator it = snowflakes.begin(); it != snowflakes.end(); ) {
+		if (it->timeOnFloor > maxTimeSnowOnFloor) {
+			it = snowflakes.erase(it);
+		} else {
+			++it;
+		}
+	}
 }
 
 
