@@ -17,6 +17,8 @@ Student Name: Yung Man Lee
 #include <vector>
 using namespace std;
 
+const float PI = 3.14159265;
+
 int winWidth = 600;
 int winHeight = 600;
 
@@ -38,6 +40,7 @@ struct snowflake
 
 float snowflakeFallingSpeed = 1.0f;
 vector<snowflake> snowflakes;
+bool isSnowFalling = true;
 
 void addRandomSnowflake();
 
@@ -120,10 +123,10 @@ void drawOrigin()
 void addRandomSnowflake()
 {
 	snowflake snowflake;
-	snowflake.radius = ((rand() % 100) + 10.0) / 50;
+	snowflake.radius = ((rand() % 100) + 10.0) / 20;
 	snowflake.x = (rand() % (int)groundWidth) - groundWidth/2;
 	snowflake.z = (rand() % (int)groundLong) - groundLong/2;
-	snowflake.y =  (float)((rand() % 200) + 10.0);
+	snowflake.y =  (float)((rand() % 200) + 100.0);
 	snowflake.timeOnFloor = 0;
 
 	snowflakes.push_back(snowflake);
@@ -182,16 +185,35 @@ void drawSnowman()
 
 void drawSnowflakes()
 {
+	const int armCount = 6;
+
 	glColor3f(1.0f, 1.0f, 1.0f);
 	for(vector<snowflake>::iterator it = snowflakes.begin(); it != snowflakes.end(); it++)
 	{
 		glPushMatrix();
-		it->y = max(it->y - snowflakeFallingSpeed, it->radius);
+
+		if(isSnowFalling)
+		{
+			it->y = max(it->y - snowflakeFallingSpeed, 0);
+		}
 		glTranslatef(it->x, it->y, it->z);
-		gluSphere(quad, it->radius, 30, 30);
+		gluDisk(quad, 0, it->radius/1.5, armCount, 1);
+
+		// Draw arms
+		glLineWidth(2.0);
+		for (int i=0; i<armCount/2; i++)
+		{
+			glBegin(GL_LINE);
+			{
+				float angle = i*PI/armCount*2 + 11.0;
+				glVertex3f(-it->radius*cos(angle), -it->radius*sin(angle), 0);
+				glVertex3f(it->radius*cos(angle), it->radius*sin(angle), 0);
+			}
+			glEnd();
+		}
 
 		// Check if fall on floor
-		if (it->y - it->radius < 0.0001)
+		if (it->y < 0.0001)
 		{
 			it->timeOnFloor++;
 		}
