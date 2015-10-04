@@ -27,6 +27,19 @@ float cam_ViewX(0), cam_ViewY(0), cam_ViewZ(0);
 float groundWidth(600.0), groundLong(800.0);
 GLUquadric *quad;
 
+struct snowflake
+{
+	float x;
+	float y;
+	float z;
+	int radius;
+	int timeOnFloor;
+};
+
+float snowflakeFallingSpeed = 1.0f;
+vector<snowflake> snowflakes;
+
+void addRandomSnowflake();
 
 void init(void) // All Setup For OpenGL Goes Here
 {
@@ -49,6 +62,11 @@ void init(void) // All Setup For OpenGL Goes Here
 	glEnable(GL_COLOR_MATERIAL); 
 
 	quad = gluNewQuadric();
+	srand(time(NULL));
+	for(int i=0; i<1000; i++)
+	{
+		addRandomSnowflake();
+	}
 }
 
 void updateCamera() 
@@ -97,6 +115,18 @@ void drawOrigin()
 	}
 	glEnd();
 	glPopMatrix();
+}
+
+void addRandomSnowflake()
+{
+	snowflake snowflake;
+	snowflake.radius = ((rand() % 100) + 10.0) / 50;
+	snowflake.x = (rand() % (int)groundWidth) - groundWidth/2;
+	snowflake.z = (rand() % (int)groundLong) - groundLong/2;
+	snowflake.y =  (float)((rand() % 200) + 10.0);
+	snowflake.timeOnFloor = 0;
+
+	snowflakes.push_back(snowflake);
 }
 
 void drawGround()
@@ -150,6 +180,25 @@ void drawSnowman()
 	glPopMatrix();
 }
 
+void drawSnowflakes()
+{
+	glColor3f(1.0f, 1.0f, 1.0f);
+	for(vector<snowflake>::iterator it = snowflakes.begin(); it != snowflakes.end(); it++)
+	{
+		glPushMatrix();
+		it->y = max(it->y - snowflakeFallingSpeed, it->radius);
+		glTranslatef(it->x, it->y, it->z);
+		gluSphere(quad, it->radius, 30, 30);
+
+		// Check if fall on floor
+		if (it->y - it->radius < 0.0001)
+		{
+			it->timeOnFloor++;
+		}
+		glPopMatrix();
+	}
+}
+
 void display(void) // Here's Where We Do All The Drawing
 {
 	glClearColor(0.0, 0.0, 0.0, 1);
@@ -164,6 +213,7 @@ void display(void) // Here's Where We Do All The Drawing
 	drawGround();
 	drawPool();
 	drawSnowman();
+	drawSnowflakes();
 
 	glutSwapBuffers();
 	glFlush();	
