@@ -23,7 +23,7 @@ int winWidth = 600;
 int winHeight = 600;
 
 float cameraMoveSpeed(10.0);
-float cam_X(0), cam_Y(300), cam_Z(500);
+float cam_X(0), cam_Y(250), cam_Z(500);
 float cam_ViewX(0), cam_ViewY(0), cam_ViewZ(0);
 
 float groundWidth(600.0), groundLong(800.0);
@@ -155,7 +155,9 @@ void drawPool()
 void drawSnowman()
 {
 	double stickiness = 20.0;
-	const double snowballsRadius[4] = {0.0, 50.0, 40.0, 30.0};
+	//const double snowballsRadius[4] = {0.0, 50.0, 40.0, 30.0};
+	//const double snowballsRadius[3] = {0.0, 45.0, 30.0};
+	const double snowballsRadius[2] = {0.0, 35.0};
 	int snowballCount = sizeof(snowballsRadius) / sizeof(snowballsRadius[0]) - 1;
 
 	glPushMatrix();
