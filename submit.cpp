@@ -23,7 +23,7 @@ int winWidth = 600;
 int winHeight = 600;
 
 float cameraMoveSpeed(10.0);
-float cam_X(0), cam_Y(250), cam_Z(500);
+float cam_X(0), cam_Y(300), cam_Z(500);
 float cam_ViewX(0), cam_ViewY(0), cam_ViewZ(0);
 
 float groundWidth(600.0), groundLong(800.0);
@@ -40,7 +40,7 @@ struct snowflake
 
 float snowflakeFallingSpeed = 1.0f;
 vector<snowflake> snowflakes;
-bool isSnowFalling = true;
+bool isSnowFalling = false;
 int maxTimeSnowOnFloor = 200;
 
 void addRandomSnowflake();
@@ -67,10 +67,10 @@ void init(void) // All Setup For OpenGL Goes Here
 
 	quad = gluNewQuadric();
 	srand(time(NULL));
-	for(int i=0; i<1000; i++)
-	{
-		addRandomSnowflake();
-	}
+	//for(int i=0; i<1000; i++)
+	//{
+	//	addRandomSnowflake();
+	//}
 }
 
 void updateCamera() 
@@ -152,19 +152,17 @@ void drawPool()
 	glPopMatrix();
 }
 
-void drawSnowman()
+void drawSnowman(vector<double> snowballsRadius)
 {
 	double stickiness = 20.0;
-	//const double snowballsRadius[4] = {0.0, 50.0, 40.0, 30.0};
-	//const double snowballsRadius[3] = {0.0, 45.0, 30.0};
-	const double snowballsRadius[2] = {0.0, 35.0};
-	int snowballCount = sizeof(snowballsRadius) / sizeof(snowballsRadius[0]) - 1;
+	
+	//int snowballCount = sizeof(snowballsRadius) / sizeof(snowballsRadius[0]) - 1;
 
 	glPushMatrix();
 
 	// Draw snowballs
 	glColor3f(0.7f, 0.7f, 0.7f);
-	for(unsigned int i=1; i<=snowballCount; i++)
+	for(unsigned int i=1; i<snowballsRadius.size(); i++)
 	{
 		glTranslatef(0.0, snowballsRadius[i] + snowballsRadius[i-1] - stickiness, 0.0);
 		gluSphere(quad, snowballsRadius[i], 60, 60);
@@ -172,15 +170,15 @@ void drawSnowman()
 
 	// Draw hat
 	glColor3f(1.0f, 0.0f, 0.2f);
-	glTranslatef(0.0, snowballsRadius[snowballCount] - 10.0, 0.0);
+	glTranslatef(0.0, snowballsRadius[snowballsRadius.size()-1] - 10.0, 0.0);
 	glRotatef(-90, 1, 0, 0);
 	glutSolidCone(20.0, 30.0, 60, 60);
 
 	// Draw eyes
 	glColor3f(0.1f, 0.1f, 0.1f);
-	glTranslatef(snowballsRadius[snowballCount] / 5, snowballsRadius[snowballCount] * -0.85, snowballsRadius[snowballCount] * -0.5);
+	glTranslatef(snowballsRadius[snowballsRadius.size()-1] / 5, snowballsRadius[snowballsRadius.size()-1] * -0.85, snowballsRadius[snowballsRadius.size()-1] * -0.5);
 	gluSphere(quad, 5, 10, 10);
-	glTranslatef(snowballsRadius[snowballCount] / -2.5, 0.0, 0.0);
+	glTranslatef(snowballsRadius[snowballsRadius.size()-1] / -2.5, 0.0, 0.0);
 	gluSphere(quad, 5, 10, 10);
 
 	glPopMatrix();
@@ -237,7 +235,11 @@ void display(void) // Here's Where We Do All The Drawing
 	drawOrigin();
 	drawGround();
 	drawPool();
-	drawSnowman();
+	vector<double> snowballsRadius;
+	snowballsRadius.push_back(0.0);
+	snowballsRadius.push_back(50.0);
+	snowballsRadius.push_back(35.0);
+	drawSnowman(snowballsRadius);
 	drawSnowflakes();
 
 	glutSwapBuffers();
@@ -290,9 +292,19 @@ void keyboard(unsigned char key, int x, int y) // Handle the keyboard events her
 	case '\033'://press 'esc' to quit
 		exit(0);
 		break;
-		// TODO:
-		// Add keyboard control here
+	case 's'://press 's' to snow
+		isSnowFalling = true;
+		for(int i=0; i<1000; i++)
+		{
+			addRandomSnowflake();
+		}
+	break;
+	case 'a'://press 'a' to add a snowman
+		
+	break;
+	case 'w'://press 'w' to water the snowman
 
+	break;
 	}
 }
 
