@@ -23,10 +23,10 @@ int winWidth = 600;
 int winHeight = 600;
 
 float cameraMoveSpeed(10.0);
-float cam_X(0), cam_Y(300), cam_Z(500);
+float cam_X(0), cam_Y(350), cam_Z(500);
 float cam_ViewX(0), cam_ViewY(0), cam_ViewZ(0);
 
-float groundWidth(600.0), groundLong(800.0);
+float groundWidth(800.0), groundLong(1200.0);
 GLUquadric *quad;
 
 struct snowflake
@@ -42,6 +42,9 @@ struct snowman
 {
 	float x;
 	float z;
+	float r;
+	float g;
+	float b;
 	vector<double> radius;
 };
 
@@ -84,6 +87,8 @@ void init(void) // All Setup For OpenGL Goes Here
 	snowman.radius.push_back(35.0);
 	snowman.x = 0;
 	snowman.z = 0;
+	snowman.r = 0.8;
+	snowman.b = 0.8;
 	snowmen.push_back(snowman);
 }
 
@@ -187,7 +192,7 @@ void drawSnowmen()
 		}
 
 		// Draw hat
-		glColor3f(1.0f, 0.0f, 0.2f);
+		glColor3f(snowmen[s].r, snowmen[s].g, snowmen[s].b);
 		glTranslatef(0.0, snowballsRadius[snowballsRadius.size()-1] - 10.0, 0.0);
 		glRotatef(-90, 1, 0, 0);
 		glutSolidCone(20.0, 30.0, 60, 60);
@@ -326,8 +331,11 @@ void keyboard(unsigned char key, int x, int y) // Handle the keyboard events her
 		{
 			snowman.radius.push_back(baseRadius - (double) (rand() % 2 + 8) * i);
 		}
-		snowman.x = rand() % 600 - 300.0;
-		snowman.z = rand() % 600 - 300.0;
+		snowman.x = rand() % 100 * 6 - 300.0;
+		snowman.z = rand() % 100 * 6 - 300.0;
+		snowman.r = rand() * 1.0 / RAND_MAX;
+		snowman.g = rand() * 1.0 / RAND_MAX;
+		snowman.b = rand() * 1.0 / RAND_MAX;
 		snowmen.push_back(snowman);
 	break;
 	case 'w'://press 'w' to water the snowman
