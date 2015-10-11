@@ -22,11 +22,18 @@ const float PI = 3.14159265;
 int winWidth = 600;
 int winHeight = 600;
 
-float cameraMoveSpeed(10.0);
+int xlimit = 700;
+int zlimit = 1200;
+int zlimitneg = -400;
+
+float keyboardCameraMoveSpeed(10.0);
+float mouseCameraMoveSpeed(0.5);
+float mouseCameraMoveDirection[2] = {0, 0};
+
 float cam_X(0), cam_Y(250), cam_Z(500);
 float cam_ViewX(0), cam_ViewY(0), cam_ViewZ(0);
 
-float groundWidth(800.0), groundLong(1200.0);
+float groundWidth(1600.0), groundLong(1800.0);
 GLUquadric *quad;
 
 struct snowflake
@@ -92,27 +99,31 @@ void init(void) // All Setup For OpenGL Goes Here
 	snowmen.push_back(snowman);
 }
 
-void updateCamera() 
-{
-	gluLookAt(cam_X,cam_Y,cam_Z, cam_ViewX, cam_ViewY, cam_ViewZ, 0, 1, 0);
-}
-
 // Move camera to specified position without changing view angle
 void moveCameraTo(float newCamX, float newCamY, float newCamZ)
 {
-	cam_ViewX = (cam_ViewX - cam_X) + newCamX;
-	cam_ViewY = (cam_ViewY - cam_Y) + newCamY;
-	cam_ViewZ = (cam_ViewZ - cam_Z) + newCamZ;
-	cam_X = newCamX;
-	cam_Y = newCamY;
-	cam_Z = newCamZ;
-	printf("moveCameraTo: %f, %f, %f; %f, %f, %f\n", cam_X,cam_Y,cam_Z, cam_ViewX, cam_ViewY, cam_ViewZ);
+	if (newCamX <= xlimit && newCamX >= -xlimit && newCamZ <= zlimit && newCamZ >= zlimitneg)
+	{
+		cam_ViewX = (cam_ViewX - cam_X) + newCamX;
+		cam_ViewY = (cam_ViewY - cam_Y) + newCamY;
+		cam_ViewZ = (cam_ViewZ - cam_Z) + newCamZ;
+		cam_X = newCamX;
+		cam_Y = newCamY;
+		cam_Z = newCamZ;
+		printf("moveCameraTo: %f, %f, %f; %f, %f, %f\n", cam_X,cam_Y,cam_Z, cam_ViewX, cam_ViewY, cam_ViewZ);
+	}
 }
 
 // Move camera by magnitude of movement
 void moveCameraBy(float deltaX, float deltaY, float deltaZ)
 {
 	moveCameraTo(cam_X + deltaX, cam_Y + deltaY, cam_Z + deltaZ);
+}
+
+void updateCamera() 
+{
+	gluLookAt(cam_X,cam_Y,cam_Z, cam_ViewX, cam_ViewY, cam_ViewZ, 0, 1, 0);
+	moveCameraBy(mouseCameraMoveSpeed * mouseCameraMoveDirection[0], 0, mouseCameraMoveSpeed * mouseCameraMoveDirection[1]);
 }
 
 void drawOrigin()
@@ -319,16 +330,16 @@ void special(int key, int x, int y) // Handle special keys
 	switch (key) 
 	{
 	case GLUT_KEY_LEFT:
-		moveCameraBy(-cameraMoveSpeed, 0, 0);
+		moveCameraBy(-keyboardCameraMoveSpeed, 0, 0);
 		break;
 	case GLUT_KEY_UP:
-		moveCameraBy(0, 0, -cameraMoveSpeed);
+		moveCameraBy(0, 0, -keyboardCameraMoveSpeed);
 		break;
 	case GLUT_KEY_RIGHT:
-		moveCameraBy(cameraMoveSpeed, 0, 0);
+		moveCameraBy(keyboardCameraMoveSpeed, 0, 0);
 		break;
 	case GLUT_KEY_DOWN:
-		moveCameraBy(0, 0, cameraMoveSpeed);
+		moveCameraBy(0, 0, keyboardCameraMoveSpeed);
 		break;
 	}
 }
@@ -359,27 +370,55 @@ void keyboard(unsigned char key, int x, int y) // Handle the keyboard events her
 		{
 			snowman.radius.push_back(baseRadius - (double) (rand() % 2 + 8) * i);
 		}
-		snowman.x = rand() % 100 * 6 - 300.0;
-		snowman.z = rand() % 100 * 6 - 300.0;
+		snowman.x = rand() % 100 * 10 - 300.0;
+		snowman.z = rand() % 100 * 10 - 300.0;
 		snowman.r = rand() * 1.0 / RAND_MAX;
 		snowman.g = rand() * 1.0 / RAND_MAX;
 		snowman.b = rand() * 1.0 / RAND_MAX;
 		snowmen.push_back(snowman);
 	break;
-	case 'w'://press 'w' to water the snowman
-
+	case 'w'://press 'w' to melt the snowman
+		
 	break;
 	}
 }
 
 void mouseclick(int button, int state, int x, int y) // Handle the mouse click events here
 {
-	printf("Button %d, State %d, Position %d, %d \n", button, state, x, y);
+	printf("Button %d, State %d, Position %d, %d \n", button, state, x, y);	
 }
 
 void mousemove(int x, int y) // Handle the mouse movement events here
 {
-	printf("Mouse moved to position %d %d \n", x, y);	
+	printf("Mouse moved to position %d %d \n", x, y);
+	float xRatio = x * 1.0 / winWidth;
+	float yRatio = y * 1.0 / winHeight;
+
+	if (xRatio < 0.2)
+	{
+		mouseCameraMoveDirection[0] = -1.0f;
+	} 
+	else if (xRatio > 0.8)
+	{
+		mouseCameraMoveDirection[0] = 1.0f;
+	}
+	else
+	{
+		mouseCameraMoveDirection[0] = 0.0f;
+	}
+
+	if (yRatio < 0.2)
+	{
+		mouseCameraMoveDirection[1] = -1.0f;
+	} 
+	else if (yRatio > 0.8)
+	{
+		mouseCameraMoveDirection[1] = 1.0f;
+	}
+	else
+	{
+		mouseCameraMoveDirection[1] = 0.0f;
+	}
 }
 
 void idle()
