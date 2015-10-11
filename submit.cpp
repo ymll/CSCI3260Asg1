@@ -23,7 +23,7 @@ int winWidth = 600;
 int winHeight = 600;
 
 float cameraMoveSpeed(10.0);
-float cam_X(0), cam_Y(350), cam_Z(500);
+float cam_X(0), cam_Y(250), cam_Z(500);
 float cam_ViewX(0), cam_ViewY(0), cam_ViewZ(0);
 
 float groundWidth(800.0), groundLong(1200.0);
@@ -171,6 +171,33 @@ void drawPool()
 	glPopMatrix();
 }
 
+void drawTrees()
+{
+	glPushMatrix();
+	//draw wooden base
+	glTranslatef(-100.0f, 0.0f, -150.0f);
+	glRotatef(-90, 1, 0, 0);
+	glColor3f(0.15f, 0.05f, 0.0f);
+	gluCylinder(quad, 30, 28, 40, 50, 10);
+	//draw snow
+	glTranslatef(0.0f, 0.0f, 30.0f);
+	glColor3f(0.8f, 0.8f, 0.8f);
+	gluCylinder(quad, 80, 60, 15, 20, 10);
+	//draw leaves cone
+	glTranslatef(0.0f, 0.0f, 8.0f);
+	glColor3f(0.1f, 0.5f, 0.3f);
+	gluCylinder(quad, 70, 0, 100, 8, 10);
+	//draw snow
+	glTranslatef(0.0f, 0.0f, 50.0f);
+	glColor3f(0.8f, 0.8f, 0.8f);
+	gluCylinder(quad, 60, 40, 15, 20, 10);
+	//draw upper cone
+	glTranslatef(0.0f, 0.0f, 8.0f);
+	glColor3f(0.1f, 0.5f, 0.3f);
+	gluCylinder(quad, 50, 0, 80, 8, 10);
+	glPopMatrix();
+}
+
 void drawSnowmen()
 {
 	for (int s=0; s<snowmen.size(); s++)
@@ -259,6 +286,7 @@ void display(void) // Here's Where We Do All The Drawing
 	drawOrigin();
 	drawGround();
 	drawPool();
+	drawTrees();
 	drawSnowmen();
 	drawSnowflakes();
 
