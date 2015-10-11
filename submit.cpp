@@ -33,6 +33,11 @@ float mouseCameraMoveDirection[2] = {0, 0};
 float cam_X(0), cam_Y(250), cam_Z(500);
 float cam_ViewX(0), cam_ViewY(0), cam_ViewZ(0);
 
+GLfloat no_mat[] = {0.0,0.0,0.0,1.0};
+GLfloat mat_diffuse[] = {0.8,0.2,0.5,1.0};
+GLfloat mat_specular[] = {1.0,1.0,1.0,1.0};
+GLfloat high_shininess[] = {100.0};
+
 float groundWidth(1600.0), groundLong(1800.0);
 GLUquadric *quad;
 
@@ -81,7 +86,7 @@ void init(void) // All Setup For OpenGL Goes Here
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);		// Cull all the back face
 	glFrontFace(GL_CCW);		// Define Counter-Clockwise as front face
-
+	
 	glEnable(GL_COLOR_MATERIAL); 
 
 	quad = gluNewQuadric();
@@ -205,6 +210,7 @@ void drawTrees()
 	//draw upper cone
 	glTranslatef(0.0f, 0.0f, 8.0f);
 	glColor3f(0.1f, 0.5f, 0.3f);
+	glMaterialfv(GL_FRONT,GL_EMISSION,no_mat);
 	gluCylinder(quad, 50, 0, 80, 8, 10);
 	glPopMatrix();
 }
