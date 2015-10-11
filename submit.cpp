@@ -38,10 +38,19 @@ struct snowflake
 	int timeOnFloor;
 };
 
+struct snowman
+{
+	float x;
+	float z;
+	vector<double> radius;
+};
+
 float snowflakeFallingSpeed = 1.0f;
 vector<snowflake> snowflakes;
 bool isSnowFalling = false;
 int maxTimeSnowOnFloor = 200;
+
+vector<snowman> snowmen;
 
 void addRandomSnowflake();
 
@@ -67,10 +76,15 @@ void init(void) // All Setup For OpenGL Goes Here
 
 	quad = gluNewQuadric();
 	srand(time(NULL));
-	//for(int i=0; i<1000; i++)
-	//{
-	//	addRandomSnowflake();
-	//}
+
+	snowman snowman;
+	vector<double> snowballsRadius;
+	snowman.radius.push_back(0.0);
+	snowman.radius.push_back(50.0);
+	snowman.radius.push_back(35.0);
+	snowman.x = 0;
+	snowman.z = 0;
+	snowmen.push_back(snowman);
 }
 
 void updateCamera() 
@@ -152,36 +166,41 @@ void drawPool()
 	glPopMatrix();
 }
 
-void drawSnowman(vector<double> snowballsRadius)
+void drawSnowmen()
 {
-	double stickiness = 20.0;
-	
-	//int snowballCount = sizeof(snowballsRadius) / sizeof(snowballsRadius[0]) - 1;
-
-	glPushMatrix();
-
-	// Draw snowballs
-	glColor3f(0.7f, 0.7f, 0.7f);
-	for(unsigned int i=1; i<snowballsRadius.size(); i++)
+	for (int s=0; s<snowmen.size(); s++)
 	{
-		glTranslatef(0.0, snowballsRadius[i] + snowballsRadius[i-1] - stickiness, 0.0);
-		gluSphere(quad, snowballsRadius[i], 60, 60);
+		double stickiness = 20.0;
+		vector<double> snowballsRadius = snowmen[s].radius;
+	
+		//int snowballCount = sizeof(snowballsRadius) / sizeof(snowballsRadius[0]) - 1;
+
+		glPushMatrix();
+
+		// Draw snowballs
+		glColor3f(0.7f, 0.7f, 0.7f);
+		glTranslatef(snowmen[s].x, 0.0, snowmen[s].z);
+		for(unsigned int i=1; i<snowballsRadius.size(); i++)
+		{
+			glTranslatef(0.0, snowballsRadius[i] + snowballsRadius[i-1] - stickiness, 0.0);
+			gluSphere(quad, snowballsRadius[i], 60, 60);
+		}
+
+		// Draw hat
+		glColor3f(1.0f, 0.0f, 0.2f);
+		glTranslatef(0.0, snowballsRadius[snowballsRadius.size()-1] - 10.0, 0.0);
+		glRotatef(-90, 1, 0, 0);
+		glutSolidCone(20.0, 30.0, 60, 60);
+
+		// Draw eyes
+		glColor3f(0.1f, 0.1f, 0.1f);
+		glTranslatef(snowballsRadius[snowballsRadius.size()-1] / 5, snowballsRadius[snowballsRadius.size()-1] * -0.85, snowballsRadius[snowballsRadius.size()-1] * -0.5);
+		gluSphere(quad, 5, 10, 10);
+		glTranslatef(snowballsRadius[snowballsRadius.size()-1] / -2.5, 0.0, 0.0);
+		gluSphere(quad, 5, 10, 10);
+
+		glPopMatrix();
 	}
-
-	// Draw hat
-	glColor3f(1.0f, 0.0f, 0.2f);
-	glTranslatef(0.0, snowballsRadius[snowballsRadius.size()-1] - 10.0, 0.0);
-	glRotatef(-90, 1, 0, 0);
-	glutSolidCone(20.0, 30.0, 60, 60);
-
-	// Draw eyes
-	glColor3f(0.1f, 0.1f, 0.1f);
-	glTranslatef(snowballsRadius[snowballsRadius.size()-1] / 5, snowballsRadius[snowballsRadius.size()-1] * -0.85, snowballsRadius[snowballsRadius.size()-1] * -0.5);
-	gluSphere(quad, 5, 10, 10);
-	glTranslatef(snowballsRadius[snowballsRadius.size()-1] / -2.5, 0.0, 0.0);
-	gluSphere(quad, 5, 10, 10);
-
-	glPopMatrix();
 }
 
 void drawSnowflakes()
@@ -235,11 +254,7 @@ void display(void) // Here's Where We Do All The Drawing
 	drawOrigin();
 	drawGround();
 	drawPool();
-	vector<double> snowballsRadius;
-	snowballsRadius.push_back(0.0);
-	snowballsRadius.push_back(50.0);
-	snowballsRadius.push_back(35.0);
-	drawSnowman(snowballsRadius);
+	drawSnowmen();
 	drawSnowflakes();
 
 	glutSwapBuffers();
@@ -287,6 +302,10 @@ void special(int key, int x, int y) // Handle special keys
 
 void keyboard(unsigned char key, int x, int y) // Handle the keyboard events here
 {
+	int snowballsCount;
+	double baseRadius;
+	snowman snowman;
+
 	switch (key) 
 	{
 	case '\033'://press 'esc' to quit
@@ -300,7 +319,16 @@ void keyboard(unsigned char key, int x, int y) // Handle the keyboard events her
 		}
 	break;
 	case 'a'://press 'a' to add a snowman
-		
+		snowballsCount = rand() % 2 + 2;
+		baseRadius = (double) (rand() % 20) + 40.0;
+		snowman.radius.push_back(0.0);
+		for (int i=0;i<snowballsCount;i++)
+		{
+			snowman.radius.push_back(baseRadius - (double) (rand() % 2 + 8) * i);
+		}
+		snowman.x = rand() % 600 - 300.0;
+		snowman.z = rand() % 600 - 300.0;
+		snowmen.push_back(snowman);
 	break;
 	case 'w'://press 'w' to water the snowman
 
