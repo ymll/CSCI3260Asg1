@@ -30,6 +30,9 @@ float keyboardCameraMoveSpeed(10.0);
 float mouseCameraMoveSpeed(0.5);
 float mouseCameraMoveDirection[2] = {0, 0};
 
+bool isExtraLightOn = true;
+float light_X(-600), light_Y(150), light_Z(0);
+
 float cam_X(0), cam_Y(250), cam_Z(500);
 float cam_ViewX(0), cam_ViewY(0), cam_ViewZ(0);
 
@@ -79,8 +82,27 @@ void init(void) // All Setup For OpenGL Goes Here
 	glLightfv(GL_LIGHT0, GL_AMBIENT, light0_mat1);
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, light0_diff1);
 
+	// Light 1 Settings
+	static GLfloat ambientLight[] = { 0.01f, 0.01f, 0.0f, 1.0f };
+	static GLfloat diffuseLight[] = { 0.25f, 0.25f, 0.0f, 1.0f };
+	static GLfloat specularLight[] = { 0.05f, 0.05f, 0.0f, 1.0f };
+	static GLfloat position[] = { light_X, light_Y, light_Z, 1.0f };
+	glLightfv(GL_LIGHT1, GL_AMBIENT, ambientLight);
+	glLightfv(GL_LIGHT1, GL_DIFFUSE, diffuseLight);
+	glLightfv(GL_LIGHT1, GL_SPECULAR, specularLight);
+	glLightfv(GL_LIGHT1, GL_POSITION, position);
+
 	glEnable(GL_LIGHTING);
 	glEnable(GL_LIGHT0);
+	if(isExtraLightOn)
+	{
+		glEnable(GL_LIGHT1);
+	}
+
+	// Default material
+	glMaterialfv(GL_FRONT,GL_DIFFUSE,mat_diffuse);
+	glMaterialfv(GL_FRONT,GL_SPECULAR,mat_specular);
+	glMaterialfv(GL_FRONT,GL_SHININESS,high_shininess);
 
 	glEnable(GL_NORMALIZE);
 	glEnable(GL_DEPTH_TEST);
@@ -177,6 +199,15 @@ void drawGround()
 	glPopMatrix();
 }
 
+void drawSun()
+{
+	glPushMatrix();
+	glTranslatef(light_X, light_Y, light_Z);
+	glColor3f(0.5f, 0.6f, 0.2f);
+	glutSolidSphere(30.0, 30, 8);
+	glPopMatrix();
+}
+
 void drawPool()
 {
 	glPushMatrix();
@@ -210,7 +241,6 @@ void drawTrees()
 	//draw upper cone
 	glTranslatef(0.0f, 0.0f, 8.0f);
 	glColor3f(0.1f, 0.5f, 0.3f);
-	glMaterialfv(GL_FRONT,GL_EMISSION,no_mat);
 	gluCylinder(quad, 50, 0, 80, 8, 10);
 	glPopMatrix();
 }
@@ -302,6 +332,7 @@ void display(void) // Here's Where We Do All The Drawing
 	// Draw grounds and objects here
 	drawOrigin();
 	drawGround();
+	drawSun();
 	drawPool();
 	drawTrees();
 	drawSnowmen();
@@ -386,6 +417,16 @@ void keyboard(unsigned char key, int x, int y) // Handle the keyboard events her
 	case 'w'://press 'w' to melt the snowman
 		
 	break;
+	case 'l':
+		isExtraLightOn = !isExtraLightOn;
+		if(isExtraLightOn)
+		{
+			glEnable(GL_LIGHT1);
+		}
+		else
+		{
+			glDisable(GL_LIGHT1);
+		}
 	}
 }
 
