@@ -19,8 +19,8 @@ using namespace std;
 
 const float PI = 3.14159265;
 
-int winWidth = 600;
-int winHeight = 600;
+int winWidth = 1000;
+int winHeight = 800;
 
 int xlimit = 700;
 int zlimit = 1200;
@@ -30,7 +30,7 @@ float keyboardCameraMoveSpeed(10.0);
 float mouseCameraMoveSpeed(0.5);
 float mouseCameraMoveDirection[2] = {0, 0};
 
-float cam_X(0), cam_Y(250), cam_Z(500);
+float cam_X(0), cam_Y(350), cam_Z(600);
 float cam_ViewX(0), cam_ViewY(0), cam_ViewZ(0);
 
 GLfloat no_mat[] = {0.0,0.0,0.0,1.0};
@@ -60,12 +60,26 @@ struct snowman
 	vector<double> radius;
 };
 
+struct gift
+{
+	float x;
+	float z;
+	float boxsize;
+	float r1;
+	float g1;
+	float b1;
+	float r2;
+	float g2;
+	float b2;
+};
+
 float snowflakeFallingSpeed = 1.0f;
 vector<snowflake> snowflakes;
 bool isSnowFalling = false;
 int maxTimeSnowOnFloor = 200;
 
 vector<snowman> snowmen;
+vector<gift> gifts;
 
 void addRandomSnowflake();
 
@@ -102,6 +116,15 @@ void init(void) // All Setup For OpenGL Goes Here
 	snowman.r = 0.8;
 	snowman.b = 0.8;
 	snowmen.push_back(snowman);
+
+	gift gift;
+	gift.x = -120;
+	gift.z = 30;
+	gift.boxsize = 60;
+	gift.r1 = 1.0f;
+	gift.r2 = 1.0f;
+	gift.g2 = 1.0f;
+	gifts.push_back(gift);
 }
 
 // Move camera to specified position without changing view angle
@@ -168,31 +191,33 @@ void addRandomSnowflake()
 	snowflakes.push_back(snowflake);
 }
 
-void drawGiftBox(float x, float z, float boxsize)
+void drawGiftBox()
 {
-	glPushMatrix();
-	glTranslatef(x, 1.0f, z);
-	glRotatef(-90, 1, 0, 0);
-	//draw red box
-	glPushMatrix();
-	glColor3f(0.9f, 0.1f, 0.0f);
-	glScalef(boxsize, boxsize, boxsize);
-	glutSolidCube(1.0f);
-	glPopMatrix();
-	//draw yellow ribbon
-	glPushMatrix();
-	glColor3f(1.0f, 1.0f, 0.3f);
-	glScalef(10.0f, boxsize+5.0f, boxsize+5.0f);
-	glutSolidCube(1.0f);
-	glPopMatrix();
-	//draw yellow ribbon
-	glPushMatrix();
-	glColor3f(1.0f, 1.0f, 0.3f);
-	glScalef(boxsize+5.0f, 10.0f, boxsize+5.0f);
-	glutSolidCube(1.0f);
-	glPopMatrix();
+	for (int g=0; g<gifts.size(); g++)
+	{
+		glPushMatrix();
+		glTranslatef(gifts[g].x, 1.0f, gifts[g].z);
+		glRotatef(-90, 1, 0, 0);
+		//draw red box
+		glPushMatrix();
+		glColor3f(gifts[g].r1, gifts[g].g1, gifts[g].b1);
+		glScalef(gifts[g].boxsize, gifts[g].boxsize, gifts[g].boxsize);
+		glutSolidCube(1.0f);
+		glPopMatrix();
+		//draw yellow ribbon
+		glPushMatrix();
+		glColor3f(gifts[g].r2, gifts[g].g2, gifts[g].b2);
+		glScalef(10.0f, gifts[g].boxsize+5.0f, gifts[g].boxsize+5.0f);
+		glutSolidCube(1.0f);
+		glPopMatrix();
+		//draw yellow ribbon
+		glPushMatrix();
+		glScalef(gifts[g].boxsize+5.0f, 10.0f, gifts[g].boxsize+5.0f);
+		glutSolidCube(1.0f);
+		glPopMatrix();
 
-	glPopMatrix();
+		glPopMatrix();
+	}
 }
 
 void drawGround()
@@ -237,7 +262,6 @@ void drawTrees()
 	//draw upper cone
 	glTranslatef(0.0f, 0.0f, 8.0f);
 	glColor3f(0.1f, 0.5f, 0.3f);
-	glMaterialfv(GL_FRONT,GL_EMISSION,no_mat);
 	gluCylinder(quad, 50, 0, 80, 8, 10);
 	glPopMatrix();
 }
@@ -331,7 +355,7 @@ void display(void) // Here's Where We Do All The Drawing
 	drawGround();
 	drawPool();
 	drawTrees();
-	drawGiftBox(-120, 30, 60);
+	drawGiftBox();
 	drawSnowmen();
 	drawSnowflakes();
 
@@ -383,6 +407,7 @@ void keyboard(unsigned char key, int x, int y) // Handle the keyboard events her
 	int snowballsCount;
 	double baseRadius;
 	snowman snowman;
+	gift gift;
 
 	switch (key) 
 	{
@@ -411,8 +436,17 @@ void keyboard(unsigned char key, int x, int y) // Handle the keyboard events her
 		snowman.b = rand() * 1.0 / RAND_MAX;
 		snowmen.push_back(snowman);
 	break;
-	case 'w'://press 'w' to melt the snowman
-		
+	case 'd'://press 'd' to drop a gift box
+		gift.x = rand() % 200 * 5 - 500.0;
+		gift.z = rand() % 200 * 5 - 500.0;
+		gift.boxsize = rand() % 20 + 30; 
+		gift.r1 = rand() * 1.0 / RAND_MAX;
+		gift.g1 = rand() * 1.0 / RAND_MAX;
+		gift.b1 = rand() * 1.0 / RAND_MAX;
+		gift.r2 = rand() * 1.0 / RAND_MAX;
+		gift.g2 = rand() * 1.0 / RAND_MAX;
+		gift.b2 = rand() * 1.0 / RAND_MAX;
+		gifts.push_back(gift);
 	break;
 	}
 }
