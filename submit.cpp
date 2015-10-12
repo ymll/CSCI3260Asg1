@@ -31,9 +31,9 @@ float mouseCameraMoveSpeed(0.5);
 float mouseCameraMoveDirection[2] = {0, 0};
 
 bool isExtraLightOn = true;
-float light_X(-600), light_Y(150), light_Z(0);
+float light_X(-500), light_Y(300), light_Z(-1000);
 
-float cam_X(0), cam_Y(350), cam_Z(600);
+float cam_X(0), cam_Y(350), cam_Z(800);
 float cam_ViewX(0), cam_ViewY(0), cam_ViewZ(0);
 
 GLfloat no_mat[] = {0.0,0.0,0.0,1.0};
@@ -253,11 +253,14 @@ void drawGround()
 
 void drawSun()
 {
-	glPushMatrix();
-	glTranslatef(light_X, light_Y, light_Z);
-	glColor3f(0.5f, 0.6f, 0.2f);
-	glutSolidSphere(30.0, 30, 8);
-	glPopMatrix();
+	if (isExtraLightOn)
+	{
+		glPushMatrix();
+		glTranslatef(light_X, light_Y, light_Z);
+		glColor3f(1.0f, 0.6f, 0.0f);
+		glutSolidSphere(200.0, 30, 8);
+		glPopMatrix();
+	}
 }
 
 void drawPool()
@@ -498,7 +501,7 @@ void keyboard(unsigned char key, int x, int y) // Handle the keyboard events her
 		snowman.b = rand() * 1.0 / RAND_MAX;
 		snowmen.push_back(snowman);
 	break;
-	case 'd'://press 'd' to drop a gift box
+	case 'g'://press 'g' to drop a gift box
 		gift.x = rand() % 200 * 5 - 500.0;
 		gift.z = rand() % 200 * 5 - 500.0;
 		gift.boxsize = rand() % 20 + 30; 
@@ -510,7 +513,7 @@ void keyboard(unsigned char key, int x, int y) // Handle the keyboard events her
 		gift.b2 = rand() * 1.0 / RAND_MAX;
 		gifts.push_back(gift);
 	break;
-	case 'l':
+	case 'l'://press 'l' to trigger sunlight
 		isExtraLightOn = !isExtraLightOn;
 		if(isExtraLightOn)
 		{
