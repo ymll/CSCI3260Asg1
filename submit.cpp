@@ -239,31 +239,61 @@ void drawPool()
 	glPopMatrix();
 }
 
-void drawTrees()
+void drawTree(float x, float z, float size)
 {
 	glPushMatrix();
 	//draw wooden base
-	glTranslatef(-100.0f, 0.0f, -150.0f);
+	glTranslatef(x, 0.0f, z);
 	glRotatef(-90, 1, 0, 0);
 	glColor3f(0.15f, 0.05f, 0.0f);
-	gluCylinder(quad, 30, 28, 40, 50, 10);
+	gluCylinder(quad, 30 * size, 28 * size, 40 * size, 50, 10);
 	//draw snow
 	glTranslatef(0.0f, 0.0f, 30.0f);
 	glColor3f(0.8f, 0.8f, 0.8f);
-	gluCylinder(quad, 80, 60, 15, 20, 10);
+	gluCylinder(quad, 80 * size, 60 * size, 15 * size, 20, 10);
 	//draw leaves cone
 	glTranslatef(0.0f, 0.0f, 8.0f);
 	glColor3f(0.1f, 0.5f, 0.3f);
-	gluCylinder(quad, 70, 0, 100, 8, 10);
+	gluCylinder(quad, 70 * size, 0, 100 * size, 8, 10);
 	//draw snow
 	glTranslatef(0.0f, 0.0f, 50.0f);
 	glColor3f(0.8f, 0.8f, 0.8f);
-	gluCylinder(quad, 60, 40, 15, 20, 10);
+	gluCylinder(quad, 60 * size, 40 * size, 15 * size, 20, 10);
 	//draw upper cone
 	glTranslatef(0.0f, 0.0f, 8.0f);
 	glColor3f(0.1f, 0.5f, 0.3f);
-	gluCylinder(quad, 50, 0, 80, 8, 10);
+	gluCylinder(quad, 50 * size, 0, 80 * size, 8, 10);
 	glPopMatrix();
+}
+
+void drawTrees()
+{
+	drawTree(0, -550, 1);
+	drawTree(600, -500, 0.6);
+	drawTree(-300, -500, 0.8);
+	drawTree(200, -500, 1);
+	drawTree(-600, -450, 1.2);
+	drawTree(500, -400, 1.1);
+	drawTree(-200, -350, 1.2);
+	drawTree(580, -200, 1);
+	drawTree(-400, -150, 1);
+	drawTree(-350, 80, 0.8);
+	drawTree(350, 80, 0.8);
+	drawTree(-500, 150, 0.7);
+	drawTree(600, 200, 0.6);
+	drawTree(-400, 250, 0.6);
+	drawTree(-150, 300, 0.7);
+	drawTree(550, 300, 0.6);
+	drawTree(-600, 400, 0.7);
+	drawTree(350, 400, 0.7);
+	drawTree(-500, 500, 0.8);
+	drawTree(-650, 600, 1);
+	drawTree(200, 500, 0.6);
+	drawTree(700, 650, 1);
+	drawTree(0, 750, 1.2);
+	drawTree(300, 800, 1.3);
+	drawTree(-200, 850, 1);
+	drawTree(500, 850, 0.8);
 }
 
 void drawSnowmen()
