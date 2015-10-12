@@ -40,6 +40,10 @@ GLfloat no_mat[] = {0.0,0.0,0.0,1.0};
 GLfloat mat_diffuse[] = {0.8,0.2,0.5,1.0};
 GLfloat mat_specular[] = {1.0,1.0,1.0,1.0};
 GLfloat high_shininess[] = {100.0};
+GLfloat special_tree_amb[] = {0.19225, 0.19225, 0.19225, 1.0};
+GLfloat special_tree_diff[] = {0.50754, 0.50754, 0.50754, 1.0};
+GLfloat special_tree_spec[] = {0.508273, 0.508273, 0.508273, 1.0};
+GLfloat special_tree_shininess[] = {0.4};
 
 float groundWidth(1600.0), groundLong(1800.0);
 GLUquadric *quad;
@@ -112,11 +116,6 @@ void init(void) // All Setup For OpenGL Goes Here
 	{
 		glEnable(GL_LIGHT1);
 	}
-
-	// Default material
-	glMaterialfv(GL_FRONT,GL_DIFFUSE,mat_diffuse);
-	glMaterialfv(GL_FRONT,GL_SPECULAR,mat_specular);
-	glMaterialfv(GL_FRONT,GL_SHININESS,high_shininess);
 
 	glEnable(GL_NORMALIZE);
 	glEnable(GL_DEPTH_TEST);
@@ -302,13 +301,6 @@ void drawTree(float x, float z, float size)
 
 void drawTrees()
 {
-	drawTree(0, -550, 1);
-	drawTree(600, -500, 0.6);
-	drawTree(-300, -500, 0.8);
-	drawTree(200, -500, 1);
-	drawTree(-600, -450, 1.2);
-	drawTree(500, -400, 1.1);
-	drawTree(-200, -350, 1.2);
 	drawTree(580, -200, 1);
 	drawTree(-400, -150, 1);
 	drawTree(-350, 80, 0.8);
@@ -328,6 +320,19 @@ void drawTrees()
 	drawTree(300, 800, 1.3);
 	drawTree(-200, 850, 1);
 	drawTree(500, 850, 0.8);
+
+	// Tree wth different material
+	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, special_tree_amb);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, special_tree_diff);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, special_tree_spec);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, special_tree_shininess);
+	drawTree(0, -550, 1);
+	drawTree(600, -500, 0.6);
+	drawTree(-300, -500, 0.8);
+	drawTree(200, -500, 1);
+	drawTree(-600, -450, 1.2);
+	drawTree(500, -400, 1.1);
+	drawTree(-200, -350, 1.2);
 }
 
 void drawSnowmen()
@@ -409,6 +414,11 @@ void display(void) // Here's Where We Do All The Drawing
 {
 	glClearColor(0.0, 0.0, 0.0, 1);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+	
+	// Default material
+	glMaterialfv(GL_FRONT,GL_DIFFUSE,mat_diffuse);
+	glMaterialfv(GL_FRONT,GL_SPECULAR,mat_specular);
+	glMaterialfv(GL_FRONT,GL_SHININESS,high_shininess);
 
 	glLoadIdentity();
 	updateCamera();
@@ -419,10 +429,10 @@ void display(void) // Here's Where We Do All The Drawing
 	drawGround();
 	drawSun();
 	drawPool();
-	drawTrees();
 	drawGiftBox();
 	drawSnowmen();
 	drawSnowflakes();
+	drawTrees();
 
 	glutSwapBuffers();
 	glFlush();	
