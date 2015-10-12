@@ -168,6 +168,33 @@ void addRandomSnowflake()
 	snowflakes.push_back(snowflake);
 }
 
+void drawGiftBox(float x, float z, float boxsize)
+{
+	glPushMatrix();
+	glTranslatef(x, 1.0f, z);
+	glRotatef(-90, 1, 0, 0);
+	//draw red box
+	glPushMatrix();
+	glColor3f(0.9f, 0.1f, 0.0f);
+	glScalef(boxsize, boxsize, boxsize);
+	glutSolidCube(1.0f);
+	glPopMatrix();
+	//draw yellow ribbon
+	glPushMatrix();
+	glColor3f(1.0f, 1.0f, 0.3f);
+	glScalef(10.0f, boxsize+5.0f, boxsize+5.0f);
+	glutSolidCube(1.0f);
+	glPopMatrix();
+	//draw yellow ribbon
+	glPushMatrix();
+	glColor3f(1.0f, 1.0f, 0.3f);
+	glScalef(boxsize+5.0f, 10.0f, boxsize+5.0f);
+	glutSolidCube(1.0f);
+	glPopMatrix();
+
+	glPopMatrix();
+}
+
 void drawGround()
 {
 	glPushMatrix();
@@ -304,6 +331,7 @@ void display(void) // Here's Where We Do All The Drawing
 	drawGround();
 	drawPool();
 	drawTrees();
+	drawGiftBox(-120, 30, 60);
 	drawSnowmen();
 	drawSnowflakes();
 
