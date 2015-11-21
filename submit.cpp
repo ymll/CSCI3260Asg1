@@ -301,6 +301,9 @@ void drawTree(float x, float z, float size)
 
 void drawTrees()
 {
+	drawTree(-600, -450, 1.2);
+	drawTree(500, -400, 1.1);
+	drawTree(-200, -350, 1.2);
 	drawTree(580, -200, 1);
 	drawTree(-400, -150, 1);
 	drawTree(-350, 80, 0.8);
@@ -330,9 +333,6 @@ void drawTrees()
 	drawTree(600, -500, 0.6);
 	drawTree(-300, -500, 0.8);
 	drawTree(200, -500, 1);
-	drawTree(-600, -450, 1.2);
-	drawTree(500, -400, 1.1);
-	drawTree(-200, -350, 1.2);
 }
 
 void drawSnowmen()
