@@ -1,7 +1,5 @@
-﻿	CSCI3260 Assignment 1 Keyboard and Mouse Events 
-
-Name: Yung Man Lee
-Student ID: 1155032377
+# Keyboard and Mouse Events 
+	CSCI3260 Assignment 1
 
 Demo procedure:
 	
